@@ -6,7 +6,6 @@ import streamlit as st
 ACCENT, GREY, LIGHT, TEXT = "#D55E00", "#9E9E9E", "#D9D9D9", "#4D4D4D"
 THEMES = {"fit": "Fit / sizing", "fabric": "Fabric / material", "build": "Construction / durability",
           "photo": "Looks different from photo", "style": "Unflattering style", "price": "Price / value"}
-TERMS = {**THEMES, "tone_mixed": "Mixed tone", "tone_neg": "Negative tone"}
 st.set_page_config(page_title="Review Insights", layout="wide")
 
 
@@ -17,8 +16,7 @@ def load():
     df["any"] = df[list(THEMES)].any(axis=1)
     mod = pd.read_csv("outputs/rating_model.csv")
     mod = mod[mod["spec"] == "themes only"].assign(name=lambda d: d["theme"].map(THEMES))
-    cv = pd.read_csv("outputs/06_model_cv.csv").set_index("model")
-    return df, mod, cv, pd.read_csv("outputs/08_model_odds_ratios.csv"), pd.read_csv("outputs/07_model_calibration.csv")
+    return df, mod
 
 
 def wilson(k, n, z=1.96):
@@ -45,31 +43,7 @@ def hbar(d, x, y, title, xtitle, fmt, hover, lo=None, hi=None, **kw):
     return layout(fig, title, xtitle, "", **kw)
 
 
-def forest(d, title):
-    d = d.sort_values("odds_ratio")
-    top = d["odds_ratio"].idxmax()
-    fig = go.Figure(go.Scatter(
-        x=d["odds_ratio"], y=d["name"], mode="markers+text", text=d["odds_ratio"].map("{:.1f}".format),
-        textposition="top center", marker=dict(size=10, color=[ACCENT if i == top else GREY for i in d.index]),
-        error_x=dict(type="data", symmetric=False, array=d["ci_high"] - d["odds_ratio"],
-                     arrayminus=d["odds_ratio"] - d["ci_low"], color=TEXT), customdata=d[["ci_low", "ci_high"]],
-        hovertemplate="%{y}<br>odds ratio %{x:.2f} (95% CI %{customdata[0]:.2f} to %{customdata[1]:.2f})<extra></extra>"))
-    fig.add_vline(x=1, line_dash="dash", line_color=TEXT)
-    fig.update_xaxes(type="log", tickvals=[.1, .3, 1, 3, 10, 30, 100, 300], ticktext=["0.1", "0.3", "1", "3", "10", "30", "100", "300"])
-    return layout(fig, title, "Odds ratio, 1-2 stars (log scale; 1 = none)", "")
-
-
-def calibration(cal, title):
-    fig = go.Figure([go.Scatter(x=[0, .6], y=[0, .6], mode="lines", line=dict(color=LIGHT, dash="dash"), hoverinfo="skip"),
-                     go.Scatter(x=cal["predicted"], y=cal["observed"], mode="markers", marker_color=ACCENT,
-                                marker_size=cal["n"] ** .5, customdata=cal["n"],
-                                hovertemplate="predicted %{x:.1%}, observed %{y:.1%}<br>%{customdata} reviews<extra></extra>")])
-    fig.update_xaxes(tickformat=".0%")
-    fig.update_yaxes(tickformat=".0%")
-    return layout(fig, title, "Predicted probability of 1-2 stars (out-of-fold)", "Observed share of 1-2 stars")
-
-
-df, mod, cv, orr, cal = load()
+df, mod = load()
 st.title("What customers complain about, and what it costs in stars")
 st.caption(f"Random sample of {len(df):,} reviews labelled by a local llama3.2 model (Kaggle Women's E-Commerce "
            "Clothing Reviews). Estimates carry sampling error; error bars are 95% intervals.")
@@ -153,31 +127,6 @@ with st.container(border=True):
                                    hovertemplate="%{y}, %{x}: %{z:.1%}<extra></extra>", colorbar_tickformat=".0%"))
         st.plotly_chart(layout(fig, "Fit is the top complaint in every department", "", ""), width="stretch")
         st.caption(f"So what: fix sizing everywhere, not in one category. Departments with 30+ reviews in selection ({', '.join(keep)}).")
-
-st.header("Model: which complaints predict a low rating?")
-st.caption("Logistic regression predicting a 1-2 star rating from the six complaint flags (plus tone and department), "
-           "5-fold stratified cross-validation, full labelled sample. Not filtered by the sidebar.")
-full, flg, base = (cv.loc[s] for s in ["flags + tone + department", "flags only", "majority baseline"])
-sd = lambda r, c: f"{r[c + '_mean']:.2f} ± {r[c + '_sd']:.2f}"
-mk = st.columns(4)
-mk[0].metric("ROC AUC, complaints only", sd(flg, "auc"), f"{flg['auc_mean'] - base['auc_mean']:+.2f} vs 0.50 baseline")
-mk[1].metric("ROC AUC, + tone and department", sd(full, "auc"), f"{full['auc_mean'] - flg['auc_mean']:+.2f} vs complaints only")
-mk[2].metric("Recall at 0.5 threshold", sd(full, "recall"), f"baseline {base['recall_mean']:.2f}; base rate {full['base_rate']:.1%}", delta_color="off",
-             help=f"Precision at 0.5: {sd(full, 'precision')}. The baseline predicts no positives, so its precision is undefined (shown as 0).")
-mk[3].metric("Brier score (lower is better)", sd(full, "brier"), f"{full['brier_mean'] - base['brier_mean']:+.3f} vs baseline {base['brier_mean']:.3f}", delta_color="inverse")
-
-m1, m2 = st.columns(2)
-with m1.container(border=True):
-    spec = st.radio("Model", ["flags only", "flags + tone + department"], horizontal=True,
-                    format_func=lambda s: "Complaints only" if s == "flags only" else "Complaints + tone")
-    o = orr[(orr["spec"] == spec) & orr["term"].isin(TERMS)].assign(name=lambda d: d["term"].map(TERMS))
-    top = o.loc[o["odds_ratio"].idxmax()]
-    st.plotly_chart(forest(o, f"{top['name']} is the strongest low-rating signal (OR {top['odds_ratio']:.1f})"), width="stretch")
-    st.caption("So what: once tone is known, complaint flags add little, because tone nearly restates the rating. "
-               "Association only; construction is under-detected by the labeller (recall 17%), so its odds ratio is unreliable.")
-with m2.container(border=True):
-    st.plotly_chart(calibration(cal, "Predicted risks match observed low-rating rates"), width="stretch")
-    st.caption("So what: probabilities are trustworthy enough to rank reviews. Out-of-fold, by decile of predicted risk; dots near the diagonal are well calibrated.")
 
 with st.container(border=True):
     st.subheader(f"Reviews mentioning: {THEMES[browse]}")
