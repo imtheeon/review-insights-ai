@@ -11,4 +11,4 @@ SELECT department, theme, COUNT(*) AS n, ROUND(AVG(x), 4) AS rate
 FROM long
 GROUP BY department, theme
 HAVING COUNT(*) >= 30  -- n counts reviews per department; small departments are too noisy
-ORDER BY department, rate DESC;
+ORDER BY department, rate DESC, theme;

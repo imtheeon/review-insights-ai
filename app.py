@@ -92,7 +92,7 @@ with c1.container(border=True):
 with c2.container(border=True):
     m = mod.sort_values("coef", ascending=False)
     st.plotly_chart(hbar(m, "coef", "name", "Style costs the most stars per mention",
-                         "Change in rating when theme present (stars)", "{:.2f}",
+                         "Rating change (stars)", "{:.2f}",
                          "%{y}: %{x:.2f} stars (95% CI %{customdata[0]:.2f} to %{customdata[1]:.2f})<extra></extra>",
                          lo="ci_low", hi="ci_high"), width="stretch")
     st.caption("So what: a style complaint is the costliest single mention. Full-sample regression controlling for overlapping complaints.")

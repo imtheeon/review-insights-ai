@@ -92,6 +92,7 @@ python -m kaggle datasets download nicapotato/womens-ecommerce-clothing-reviews 
 python clean.py       # -> data/clean/reviews.parquet, DATA_QUALITY.md
 python classify.py    # needs Ollama running with llama3.2 (ollama pull llama3.2); uses the committed cache, so nothing is re-sent
 python analyze.py     # -> outputs/*.csv
+python make_figures.py; python screenshot.py   # -> assets/*.png (screenshot needs: playwright install chromium)
 streamlit run app.py
 ```
 

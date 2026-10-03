@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.colors import LinearSegmentedColormap
+from matplotlib.ticker import PercentFormatter
 
 ACCENT, GREY, LIGHT, TEXT = "#D55E00", "#9E9E9E", "#D9D9D9", "#4D4D4D"
 NAMES = {"fit": "Fit / sizing", "fabric": "Fabric / material", "build": "Construction / durability",
@@ -32,6 +33,8 @@ def bars(d, x, label, title, xlabel, name, fmt, lo=None, hi=None):
         ax.annotate(fmt.format(v), (e, i), xytext=(5 if v >= 0 else -5, 0), textcoords="offset points",
                     ha="left" if v >= 0 else "right", va="center", fontsize=9)
     ax.margins(x=0.15)
+    if "%" in fmt:
+        ax.xaxis.set_major_formatter(PercentFormatter(1, 0))
     ax.grid(axis="y", visible=False)
     save(fig, title, xlabel, name)
 

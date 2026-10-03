@@ -10,7 +10,7 @@ srv = subprocess.Popen([sys.executable, "-m", "streamlit", "run", "app.py", "--s
 try:
     with sync_playwright() as p:
         b = p.chromium.launch()
-        page = b.new_page(viewport={"width": 1400, "height": 3300})
+        page = b.new_page(viewport={"width": 1400, "height": 2600})
         for _ in range(30):  # wait for the server to accept connections
             try:
                 page.goto(f"http://localhost:{PORT}")
