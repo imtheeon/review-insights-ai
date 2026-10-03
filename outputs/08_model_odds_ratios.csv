@@ -1,0 +1,19 @@
+spec,term,odds_ratio,ci_low,ci_high,p,n_with_term,n_low_with_term
+flags only,fit,2.9359,1.9712,4.3728,0.0,496,120
+flags only,fabric,3.6013,2.178,5.9546,0.0,113,41
+flags only,build,1.8992,0.6477,5.5687,0.2425,23,11
+flags only,photo,1.4609,0.7661,2.7859,0.2498,80,20
+flags only,style,5.129,3.3736,7.7978,0.0,176,78
+flags only,price,0.999,0.3485,2.8638,0.9985,34,8
+flags + tone + department,fit,0.8839,0.5373,1.454,0.627,496,120
+flags + tone + department,fabric,1.6722,0.9617,2.9076,0.0685,113,41
+flags + tone + department,build,1.1662,0.4476,3.0385,0.753,23,11
+flags + tone + department,photo,0.9862,0.5134,1.8946,0.9667,80,20
+flags + tone + department,style,1.4298,0.9004,2.2707,0.1297,176,78
+flags + tone + department,price,0.5263,0.1934,1.4322,0.2089,34,8
+flags + tone + department,tone_mixed,15.0837,6.1997,36.6983,0.0,223,23
+flags + tone + department,tone_neg,130.5805,55.7637,305.7771,0.0,275,142
+flags + tone + department,dept_Bottoms,0.7505,0.3953,1.425,0.3803,240,21
+flags + tone + department,dept_Dresses,0.8501,0.5248,1.3771,0.5093,406,54
+flags + tone + department,dept_Intimate,0.5007,0.2107,1.1903,0.1174,112,9
+flags + tone + department,dept_Jackets,0.8184,0.3077,2.177,0.6881,83,8

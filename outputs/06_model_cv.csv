@@ -1,0 +1,4 @@
+model,threshold,base_rate,n,auc_mean,auc_sd,precision_mean,precision_sd,recall_mean,recall_sd,brier_mean,brier_sd
+majority baseline,0.5,0.1147,1500,0.5,0.0,0.0,0.0,0.0,0.0,0.1147,0.0018
+flags only,0.5,0.1147,1500,0.777,0.0425,0.4784,0.203,0.1279,0.0704,0.0867,0.0089
+flags + tone + department,0.5,0.1147,1500,0.9106,0.0263,0.5316,0.0957,0.4541,0.1148,0.0669,0.0081

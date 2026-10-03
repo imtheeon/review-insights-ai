@@ -6,3 +6,6 @@ requests==2.34.2
 streamlit==1.65.0
 plotly==7.1.0
 kaggle==2.2.4
+scikit-learn==1.9.1
+matplotlib==3.11.2
+playwright==1.63.0
