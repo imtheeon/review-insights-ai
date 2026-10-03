@@ -1,0 +1,5 @@
+# Raw Kaggle file is not committed; re-download with the command in the README
+data/raw/
+__pycache__/
+.venv/
+.streamlit/secrets.toml

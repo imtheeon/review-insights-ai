@@ -1,0 +1,13 @@
+dimension,category,n_sample,share_sample,n_population,share_population,diff
+department,Bottoms,240,0.16,3661,0.1617,-0.0017
+department,Dresses,406,0.2707,6144,0.2715,-0.0008
+department,Intimate,112,0.0747,1650,0.0729,0.0018
+department,Jackets,72,0.048,1002,0.0443,0.0037
+department,Tops,659,0.4393,10046,0.4438,-0.0045
+department,Trend,11,0.0073,118,0.0052,0.0021
+department,Unknown,,,13,0.0006,-0.0006
+rating,1,59,0.0393,821,0.0363,0.0031
+rating,2,113,0.0753,1548,0.0684,0.0069
+rating,3,175,0.1167,2823,0.1247,-0.0081
+rating,4,317,0.2113,4908,0.2168,-0.0055
+rating,5,836,0.5573,12534,0.5538,0.0036
