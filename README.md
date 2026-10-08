@@ -1,5 +1,7 @@
 # Review Insights AI
 
+[![tests](https://github.com/imtheeon/review-insights-ai/actions/workflows/tests.yml/badge.svg)](https://github.com/imtheeon/review-insights-ai/actions/workflows/tests.yml)
+
 **Question:** What are customers complaining about most, and how much does each complaint theme cost in lower star ratings?
 
 **Data:** The Kaggle dataset [Women's E-Commerce Clothing Reviews](https://www.kaggle.com/datasets/nicapotato/womens-ecommerce-clothing-reviews) (CC0), with 23,486 reviews and 22,634 after cleaning. Each review has free text, a 1–5 star rating and a department.
@@ -10,7 +12,7 @@
 
 ![Dashboard](assets/dashboard.png)
 
-Run it with `streamlit run app.py`.
+Run it with `streamlit run app.py`. Run `python -m pytest -q` to check that the README numbers match `outputs/`.
 
 ---
 
