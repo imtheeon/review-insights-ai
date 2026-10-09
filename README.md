@@ -2,6 +2,11 @@
 
 [![tests](https://github.com/imtheeon/review-insights-ai/actions/workflows/tests.yml/badge.svg)](https://github.com/imtheeon/review-insights-ai/actions/workflows/tests.yml)
 
+## In plain English
+- **What it does:** reads customer clothing reviews with a local AI model, sorts the complaints into six themes, and measures how many stars each theme costs.
+- **Biggest finding:** **one review in three (33%) complains about fit.** Fit and unflattering style together account for about three-quarters of the stars that complaints take off, and style hurts most per mention (about 1.3 stars lower).
+- **How far to trust it:** the AI read a random sample of 1,500 of 22,634 reviews. Its labels were checked against 100 reviews labeled by a second AI model (Claude), not a person, and it undercounts construction complaints, so treat those as a floor.
+
 **Question:** What are customers complaining about most, and how much does each complaint theme cost in lower star ratings?
 
 **Data:** The Kaggle dataset [Women's E-Commerce Clothing Reviews](https://www.kaggle.com/datasets/nicapotato/womens-ecommerce-clothing-reviews) (CC0), with 23,486 reviews and 22,634 after cleaning. Each review has free text, a 1–5 star rating and a department.
